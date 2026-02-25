@@ -1,8 +1,6 @@
 const STORAGE_KEY = 'wheel_codes';
         const CODE_HISTORY_KEY = 'wheel_code_history';
         const SPIN_HISTORY_KEY = 'wheel_spin_history';
-        // ใส่ Discord Webhook URL (จาก Server Settings > Integrations > Webhooks) ถ้าไม่ใส่จะไม่ส่งแจ้งเตือน
-        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1475856758684782798/0RpyshGBDLf8ASncUday0Uiu7-ePfw9UNnkqNxvDI0xAiTIwJRuiBmMv0p_ZrAVP0jZV';
 
         const items = [
             { name: 'Netflix 7 Day', rate: 0, color: '#4CAF50' },
@@ -191,7 +189,7 @@ const STORAGE_KEY = 'wheel_codes';
                         }
                     })
                     .catch(function() {
-                        status.textContent = '❌ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ โปรดลองใหม่หรือใช้แบบไม่ใช้ API';
+                        status.textContent = '❌ เชื่อมต่อ API ไม่ได้: เปิดจาก https:// (ไม่ใช่ file://) และตรวจสอบ Deploy Web App = Anyone';
                         status.className = 'code-status invalid';
                         spinBtn.disabled = true;
                         spinBtn.textContent = 'กรุณาใส่โค้ด';
@@ -357,7 +355,13 @@ const STORAGE_KEY = 'wheel_codes';
                 var spins = 5 + Math.floor(Math.random() * 3);
                 var finalRotation = currentRotation + (spins * 360) + targetAngle - (currentRotation % 360);
 
-                canvas.style.transform = 'rotate(' + finalRotation + 'deg)';
+                canvas.style.transform = 'translateZ(0) rotate(' + currentRotation + 'deg)';
+                canvas.offsetHeight;
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        canvas.style.transform = 'translateZ(0) rotate(' + finalRotation + 'deg)';
+                    });
+                });
                 currentRotation = finalRotation;
 
                 setTimeout(function() {
@@ -382,33 +386,6 @@ const STORAGE_KEY = 'wheel_codes';
                     }
                 }, 5000);
             });
-        }
-
-        function sendDiscordWebhook(prize, code, dateStr, timeStr, spinsLeft) {
-            if (!DISCORD_WEBHOOK_URL || !DISCORD_WEBHOOK_URL.trim()) return;
-            var now = new Date();
-            var spinsText = (spinsLeft !== undefined && spinsLeft !== null) ? String(spinsLeft) + ' ครั้ง' : '-';
-            var payload = {
-                embeds: [{
-                    title: '🎡 ผลการสุ่มวงล้อ',
-                    color: 0xC41E3A,
-                    fields: [
-                        { name: '🔑 โค้ดที่ใช้', value: code || '-', inline: true },
-                        { name: '🎁 รางวัลที่ได้', value: prize, inline: true },
-                        { name: '🎫 สิทธิ์คงเหลือ', value: spinsText, inline: true },
-                        { name: '📅 วันที่', value: dateStr, inline: false },
-                        { name: '🕐 เวลา', value: timeStr, inline: true },
-                        { name: '⏱ เวลา (ISO)', value: now.toISOString(), inline: false }
-                    ],
-                    footer: { text: 'วงล้อสุ่มรางวัล · JOKEMOO' },
-                    timestamp: now.toISOString()
-                }]
-            };
-            fetch(DISCORD_WEBHOOK_URL.trim(), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).catch(function() {});
         }
 
         function showResult(prize) {
@@ -499,5 +476,4 @@ const STORAGE_KEY = 'wheel_codes';
         if (typeof window.LINK_CREATE_CODE === 'string' && window.LINK_CREATE_CODE) {
             var el = document.getElementById('linkToCreateCode');
             if (el) el.setAttribute('href', window.LINK_CREATE_CODE);
-
         }
