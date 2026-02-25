@@ -7,7 +7,8 @@
 (function () {
     'use strict';
     // ใส่ URL จาก Google Apps Script (Deploy > Deploy as web app > Execute as: Me, Who has access: Anyone)
-    window.WHEEL_API_BASE = 'https://jokemoomovieluckwheel.github.io/jokemooluckwheelnew1.0/';
+    window.WHEEL_API_BASE = 'https://script.google.com/macros/s/AKfycby4HdNu20AJz-3JdpJP1v1-xF1_fqVRkifSZwkly4PTzuq9A978T-UjMJNAZg06RIo3eA/exec';
     // ลิงก์ไปหน้าสร้างโค้ด (ถ้าโฮสต์คนละโดเมน ใส่ URL เต็ม เช่น https://example.com/สร้างโค้ด/)
-    window.LINK_CREATE_CODE = 'https://jokemoomovieluckwheel.github.io/codejokemoo/';
+    window.LINK_CREATE_CODE = 'https://jokemoomovieluckwheel.github.io/codejoke/';
 })();
+
