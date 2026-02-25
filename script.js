@@ -384,16 +384,18 @@ const STORAGE_KEY = 'wheel_codes';
             });
         }
 
-        function sendDiscordWebhook(prize, code, dateStr, timeStr) {
+        function sendDiscordWebhook(prize, code, dateStr, timeStr, spinsLeft) {
             if (!DISCORD_WEBHOOK_URL || !DISCORD_WEBHOOK_URL.trim()) return;
-            const now = new Date();
-            const payload = {
+            var now = new Date();
+            var spinsText = (spinsLeft !== undefined && spinsLeft !== null) ? String(spinsLeft) + ' ครั้ง' : '-';
+            var payload = {
                 embeds: [{
                     title: '🎡 ผลการสุ่มวงล้อ',
                     color: 0xC41E3A,
                     fields: [
                         { name: '🔑 โค้ดที่ใช้', value: code || '-', inline: true },
                         { name: '🎁 รางวัลที่ได้', value: prize, inline: true },
+                        { name: '🎫 สิทธิ์คงเหลือ', value: spinsText, inline: true },
                         { name: '📅 วันที่', value: dateStr, inline: false },
                         { name: '🕐 เวลา', value: timeStr, inline: true },
                         { name: '⏱ เวลา (ISO)', value: now.toISOString(), inline: false }
@@ -406,7 +408,7 @@ const STORAGE_KEY = 'wheel_codes';
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
-            }).catch(() => {});
+            }).catch(function() {});
         }
 
         function showResult(prize) {
@@ -430,7 +432,17 @@ const STORAGE_KEY = 'wheel_codes';
 
             document.getElementById('resultDisplay').classList.add('show');
             createConfetti();
-            sendDiscordWebhook(prize, currentCode, dateStr, timeStr);
+            var spinsLeft = null;
+            if (apiBase()) {
+                var v = document.getElementById('spinsValue').textContent;
+                var num = parseInt(v, 10);
+                if (!isNaN(num)) spinsLeft = num;
+            } else {
+                var codes = getCodes();
+                var codeData = codes.find(function(c) { return c.code === currentCode; });
+                if (codeData && codeData.spins !== undefined) spinsLeft = codeData.spins;
+            }
+            sendDiscordWebhook(prize, currentCode, dateStr, timeStr, spinsLeft);
         }
 
         function closeResult() {
@@ -487,4 +499,5 @@ const STORAGE_KEY = 'wheel_codes';
         if (typeof window.LINK_CREATE_CODE === 'string' && window.LINK_CREATE_CODE) {
             var el = document.getElementById('linkToCreateCode');
             if (el) el.setAttribute('href', window.LINK_CREATE_CODE);
+
         }
