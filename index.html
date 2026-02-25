@@ -126,33 +126,26 @@
     </div>
     
     <script>
-document.addEventListener("keydown", function (e) {
-    // F12
-    if (e.key === "F12") {
-        e.preventDefault();
-        return false;
-    }
+(function () {
+    const threshold = 160;
 
-    // Ctrl + Shift + I / J / C
-    if (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) {
-        e.preventDefault();
-        return false;
-    }
+    setInterval(() => {
+        const devtoolsOpen =
+            window.outerWidth - window.innerWidth > threshold ||
+            window.outerHeight - window.innerHeight > threshold;
 
-    // Ctrl + U (View Source)
-    if (e.ctrlKey && e.key === "u") {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// คลิกขวา
-document.addEventListener("contextmenu", function (e) {
-    e.preventDefault();
-});
+        if (devtoolsOpen) {
+            document.body.innerHTML = "";
+            document.body.style.background = "black";
+            alert("DevTools detected");
+            location.href = "about:blank";
+        }
+    }, 300);
+})();
 </script>
 
     <script src="script.js"></script>
 </body>
 </html>
+
 
