@@ -124,28 +124,10 @@
             <button onclick="closeResult()">รับทราบ</button>
         </div>
     </div>
-    
-    <script>
-(function () {
-    const threshold = 160;
-
-    setInterval(() => {
-        const devtoolsOpen =
-            window.outerWidth - window.innerWidth > threshold ||
-            window.outerHeight - window.innerHeight > threshold;
-
-        if (devtoolsOpen) {
-            document.body.innerHTML = "";
-            document.body.style.background = "black";
-            alert("DevTools detected");
-            location.href = "about:blank";
-        }
-    }, 300);
-})();
-</script>
 
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
