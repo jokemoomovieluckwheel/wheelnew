@@ -124,7 +124,35 @@
             <button onclick="closeResult()">รับทราบ</button>
         </div>
     </div>
+    
+    <script>
+document.addEventListener("keydown", function (e) {
+    // F12
+    if (e.key === "F12") {
+        e.preventDefault();
+        return false;
+    }
+
+    // Ctrl + Shift + I / J / C
+    if (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) {
+        e.preventDefault();
+        return false;
+    }
+
+    // Ctrl + U (View Source)
+    if (e.ctrlKey && e.key === "u") {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// คลิกขวา
+document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+});
+</script>
 
     <script src="script.js"></script>
 </body>
 </html>
+
