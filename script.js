@@ -4,12 +4,12 @@ const STORAGE_KEY = 'wheel_codes';
 
         const items = [
             { name: 'Netflix 7 Day', rate: 0, color: '#4CAF50' },
-            { name: 'Netflix 1 Day', rate: 2, color: '#8BC34A' },
+            { name: 'Netflix 1 Day', rate: 3, color: '#8BC34A' },
             { name: 'Netflix 3 Day', rate: 1, color: '#FFC107' },
             { name: 'ส่วนลด 10%', rate: 1, color: '#FF9800' },
-            { name: 'ส่วนลด 5%', rate: 2, color: '#2196F3' },
+            { name: 'ส่วนลด 5%', rate: 3, color: '#2196F3' },
             { name: 'ส่วนลด 20%', rate: 0, color: '#4CAF50' },
-            { name: 'MISS', rate: 50, color: '#f44336' }
+            { name: 'MISS', rate: 49, color: '#f44336' }
         ];
 
         let isSpinning = false;
@@ -478,3 +478,4 @@ const STORAGE_KEY = 'wheel_codes';
             if (el) el.setAttribute('href', window.LINK_CREATE_CODE);
 
         }
+
