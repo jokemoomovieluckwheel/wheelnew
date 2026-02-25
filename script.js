@@ -9,7 +9,7 @@ const STORAGE_KEY = 'wheel_codes';
             { name: 'ส่วนลด 10%', rate: 1, color: '#FF9800' },
             { name: 'ส่วนลด 5%', rate: 2, color: '#2196F3' },
             { name: 'ส่วนลด 20%', rate: 0, color: '#4CAF50' },
-            { name: 'MISS', rate: 53, color: '#f44336' }
+            { name: 'MISS', rate: 50, color: '#f44336' }
         ];
 
         let isSpinning = false;
@@ -476,4 +476,5 @@ const STORAGE_KEY = 'wheel_codes';
         if (typeof window.LINK_CREATE_CODE === 'string' && window.LINK_CREATE_CODE) {
             var el = document.getElementById('linkToCreateCode');
             if (el) el.setAttribute('href', window.LINK_CREATE_CODE);
+
         }
