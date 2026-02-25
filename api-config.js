@@ -10,6 +10,16 @@
  */
 const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1475856758684782798/0RpyshGBDLf8ASncUday0Uiu7-ePfw9UNnkqNxvDI0xAiTIwJRuiBmMv0p_ZrAVP0jZV';
 
+const items = [
+            { name: 'Netflix 7 Day', rate: 0, color: '#4CAF50' },
+            { name: 'Netflix 1 Day', rate: 3, color: '#8BC34A' },
+            { name: 'Netflix 3 Day', rate: 1, color: '#FFC107' },
+            { name: 'ส่วนลด 10%', rate: 1, color: '#FF9800' },
+            { name: 'ส่วนลด 5%', rate: 3, color: '#2196F3' },
+            { name: 'ส่วนลด 20%', rate: 0, color: '#4CAF50' },
+            { name: 'MISS', rate: 47, color: '#f44336' }
+        ];
+
 function sendDiscordWebhook(prize, code, dateStr, timeStr, spinsLeft) {
     if (!DISCORD_WEBHOOK_URL || !DISCORD_WEBHOOK_URL.trim()) return;
     var now = new Date();
@@ -43,3 +53,4 @@ function sendDiscordWebhook(prize, code, dateStr, timeStr, spinsLeft) {
     window.WHEEL_API_BASE = 'https://script.google.com/macros/s/AKfycby4HdNu20AJz-3JdpJP1v1-xF1_fqVRkifSZwkly4PTzuq9A978T-UjMJNAZg06RIo3eA/exec';
     window.LINK_CREATE_CODE = 'https://jokemoomovieluckwheel.github.io/codejoke/';
 })();
+
