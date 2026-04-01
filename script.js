@@ -317,15 +317,27 @@ const STORAGE_KEY = 'wheel_codes';
             });
         }
 
+        let isResultShowing = false;
+
         function spin() {
-            if (isSpinning || !currentCode) return;
+            if (isSpinning || isResultShowing || !currentCode) return;
 
             var spinBtn = document.getElementById('spinBtn');
+            
+            // Disable ปุ่มทันทีที่กดครั้งแรก
+            isSpinning = true;
+            isResultShowing = true;
+            spinBtn.disabled = true;
+            spinBtn.textContent = 'กำลังหมุน...';
+
             Promise.resolve(useSpinCredit()).then(function(ok) {
-                if (!ok) return;
-                isSpinning = true;
-                spinBtn.disabled = true;
-                spinBtn.textContent = 'กำลังหมุน...';
+                if (!ok) {
+                    isSpinning = false;
+                    isResultShowing = false;
+                    spinBtn.disabled = false;
+                    spinBtn.textContent = 'หมุนเลย!';
+                    return;
+                }
 
                 var totalRate = items.reduce(function(sum, item) { return sum + item.rate; }, 0);
                 var random = Math.random() * totalRate;
@@ -345,13 +357,8 @@ const STORAGE_KEY = 'wheel_codes';
                 var spins = 5 + Math.floor(Math.random() * 3);
                 var finalRotation = currentRotation + (spins * 360) + targetAngle - (currentRotation % 360);
 
-                canvas.style.transform = 'translateZ(0) rotate(' + currentRotation + 'deg)';
-                canvas.offsetHeight;
-                requestAnimationFrame(function() {
-                    requestAnimationFrame(function() {
-                        canvas.style.transform = 'translateZ(0) rotate(' + finalRotation + 'deg)';
-                    });
-                });
+                canvas.style.transition = 'transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+                canvas.style.transform = 'translateZ(0) rotate(' + finalRotation + 'deg)';
                 currentRotation = finalRotation;
 
                 setTimeout(function() {
@@ -359,21 +366,6 @@ const STORAGE_KEY = 'wheel_codes';
                     recordSpinResult(prize);
                     showResult(prize);
                     isSpinning = false;
-                    if (apiBase()) {
-                        var v = document.getElementById('spinsValue').textContent;
-                        var left = parseInt(v, 10) || 0;
-                        if (left > 0) {
-                            spinBtn.disabled = false;
-                            spinBtn.textContent = 'หมุนเลย!';
-                        }
-                    } else {
-                        var codes = getCodes();
-                        var codeData = codes.find(function(c) { return c.code === currentCode; });
-                        if (codeData && codeData.spins > 0) {
-                            spinBtn.disabled = false;
-                            spinBtn.textContent = 'หมุนเลย!';
-                        }
-                    }
                 }, 5000);
             });
         }
@@ -414,6 +406,24 @@ const STORAGE_KEY = 'wheel_codes';
 
         function closeResult() {
             document.getElementById('resultDisplay').classList.remove('show');
+            isResultShowing = false;
+            
+            var spinBtn = document.getElementById('spinBtn');
+            if (apiBase()) {
+                var v = document.getElementById('spinsValue').textContent;
+                var left = parseInt(v, 10) || 0;
+                if (left > 0) {
+                    spinBtn.disabled = false;
+                    spinBtn.textContent = 'หมุนเลย!';
+                }
+            } else {
+                var codes = getCodes();
+                var codeData = codes.find(function(c) { return c.code === currentCode; });
+                if (codeData && codeData.spins > 0) {
+                    spinBtn.disabled = false;
+                    spinBtn.textContent = 'หมุนเลย!';
+                }
+            }
         }
 
         function createConfetti() {
